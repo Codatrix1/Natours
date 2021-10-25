@@ -1,0 +1,151 @@
+.popup {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba($color-black, 0.8);
+  z-index: 4000;
+
+  // In-order to animate the pop up, use these two to HIDE the popup
+  opacity: 0;
+  visibility: hidden;
+
+  transition: all 0.3s;
+
+  // ⭐⭐Graceful Degradation: Feature Query
+
+  // ⭐ Adding the backdrop-filter property to Supported Browsers: Graceful Degradation for Older Browsers:
+  // else Fallback with Previous declaration
+  @supports (-webkit-backdrop-filter: blur(10px)) or
+    (backdrop-filter: blur(10px)) {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba($color-black, 0.3);
+  }
+
+  &__content {
+    @include center-of-the-page;
+    width: 75%;
+    // height: 50rem;
+
+    box-shadow: 0 2rem 4rem rgba($color-black, 0.2);
+    background-color: $color-white;
+    border-radius: 3px;
+    overflow: hidden;
+
+    // Simulate Table
+    display: table;
+
+    opacity: 0;
+    // Using two transform properties, as one property is already present in pur mixin
+    transform: translate(-50%, -50%) scale(0.5);
+
+    transition: all 0.5s 0.2s;
+    // backface-visibility: hidden;
+  }
+
+  &__left {
+    width: 33.333333%;
+
+    // Simulating table
+    display: table-cell;
+
+    @include respond(tab-land) {
+      width: 0;
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%; // Parent Container's width
+
+    @include respond(tab-land) {
+      width: 0;
+    }
+  }
+
+  &__right {
+    width: 66.666667%;
+
+    // Simulating table
+    display: table-cell;
+    vertical-align: middle;
+
+    padding: 3rem 5rem;
+
+    @include respond(tab-land) {
+      width: 100%;
+    }
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    margin-bottom: 4rem;
+
+    // Column LayOut
+
+    -moz-column-count: 2;
+    -moz-column-gap: 4rem;
+    -moz-column-rule: 1px solid $color-grey-light-2;
+
+    // Dont-do manually: Tools for prefixing - Auto PreFixer
+    column-count: 2;
+    column-gap: 4rem;
+    column-rule: 1px solid $color-grey-light-2;
+
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+
+    @include respond(tab-land) {
+      // Column LayOut
+
+      -moz-column-count: 1;
+      -moz-column-gap: 0;
+      -moz-column-rule: none;
+
+      // Dont-do manually: Tools for prefixing - Auto PreFixer
+      column-count: 1;
+      column-gap: 0;
+      column-rule: none;
+
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+
+  // Open States of the Popup
+  &:target {
+    // Targets the assigned element "popup" and applies the properties
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:target &__content {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  &__close {
+    &:link,
+    &:visited {
+      position: absolute;
+      color: $color-grey-dark;
+      top: 2.5rem;
+      right: 2.5rem;
+      font-size: 5rem;
+      text-decoration: none;
+      display: inline-block;
+      line-height: 1;
+      transition: all 0.2s;
+    }
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}

@@ -1,0 +1,110 @@
+.story {
+  width: 75%;
+
+  // Center block within a block
+  margin: 0 auto;
+  box-shadow: 0 3rem 6rem rgba($color-black, 0.1);
+  background-color: rgba($color-white, 0.6);
+  border-radius: 0.3rem;
+  padding: 6rem;
+  font-size: $default-font-size;
+  transform: skewX(-12deg);
+
+  //   To override the original padding on left (6rem + 3rem), as transformed (-3deg)
+  padding-left: 9rem;
+
+  position: relative;
+
+  @include respond(tab-port) {
+    width: 100%;
+    padding: 4rem;
+    padding-left: 7rem;
+  }
+
+  @include respond(phone) {
+    transform: skewY(0);
+  }
+
+  &__shape {
+    // It must be floated, defined height and width to use the vectorized circle shape
+    width: 15rem;
+    height: 15rem;
+
+    float: left;
+
+    // // shape-outside: circle(radius at horizontal vertical) and float required as well as defined width and height
+    // -webkit-shape-outside: circle(50% at 50% 50%);
+    // shape-outside: circle(50% at 50% 50%);
+
+    // -webkit-clip-path: circle(50% at 50% 50%);
+    // clip-path: circle(50% at 50% 50%);
+
+    // To put space between the circle and the text, use tranform, when its floated
+    transform: translateX(-3rem) skewX(12deg);
+
+    position: relative;
+    overflow: hidden; // ⚡ Glitch Fixed: includes the Feature Query
+    border-radius: 50%;
+
+    // ⭐⭐ Graceful Degradation: Feature Query: For browsers that dont support clip path:
+
+    @supports (clip-path: polygon(0 0)) or (-webkit-clip-path: polygon(0 0)) {
+      -webkit-clip-path: circle(50% at 50% 50%);
+      clip-path: circle(50% at 50% 50%);
+
+      -webkit-shape-outside: circle(50% at 50% 50%);
+      shape-outside: circle(50% at 50% 50%);
+
+      border-radius: none;
+    }
+
+    @include respond(phone) {
+      transform: translateX(-3rem) skewX(0);
+    }
+  }
+
+  &__image {
+    height: 100%;
+    // to center the image within the figure, and set the initial state zoomed
+    transform: translateX(-4rem) scale(1.4);
+
+    transition: all 0.5s;
+    // filter: blur(0.1rem) brightness(98%);
+  }
+
+  &__text {
+    transform: skewX(12deg);
+
+    @include respond(phone) {
+      transform: skewX(0);
+    }
+  }
+
+  &__caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    color: $color-white;
+    font-size: 1.7rem;
+    text-transform: uppercase;
+
+    // Initial position
+    transform: translate(-50%, 20%);
+    opacity: 0;
+    transition: all 0.5s;
+  }
+
+  &:hover &__caption {
+    // Final position
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover &__image {
+    transform: translateX(-4rem) scale(1);
+
+    // To apply image filter
+    filter: blur(0.3rem) brightness(80%);
+  }
+}
